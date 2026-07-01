@@ -25,7 +25,7 @@ implements it, and opens a PR.
 
 ## Phase 2 — Editor UI
 
-- [ ] **editor-scaffold**: Create the `@lit-pigeon/whatsapp-editor` package
+- [x] **editor-scaffold** (#1): Create the `@lit-pigeon/whatsapp-editor` package
   (`packages/editor/`). package.json (type module, exports, `files`, publishConfig
   public, `@lit-pigeon/whatsapp-core` as a `workspace:^` dep, `lit ^3` as a
   peerDependency + devDependency), a Lit-friendly `tsconfig.json`
