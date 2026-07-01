@@ -1,0 +1,48 @@
+{
+  "name": "@lit-pigeon/whatsapp-react",
+  "version": "0.0.0",
+  "description": "React wrapper for the <pigeon-whatsapp-editor> WhatsApp template editor web component.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": ["whatsapp", "message-template", "react", "web-components", "lit-pigeon"],
+  "author": "Lit Pigeon Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/snxstudio/lit-pigeon-whatsapp/tree/main/packages/react#readme",
+  "bugs": "https://github.com/snxstudio/lit-pigeon-whatsapp/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snxstudio/lit-pigeon-whatsapp.git",
+    "directory": "packages/react"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lit-pigeon/whatsapp-editor": "workspace:^",
+    "@lit/react": "^1.0.6"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "happy-dom": "^15.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
