@@ -71,7 +71,7 @@ implements it, and opens a PR.
 
 ## Phase 4 — Ecosystem & release
 
-- [ ] **framework-wrappers**: Thin `@lit-pigeon/whatsapp-react`,
+- [x] **framework-wrappers** (#6): Thin `@lit-pigeon/whatsapp-react`,
   `-vue`, `-svelte` wrappers around `<pigeon-whatsapp-editor>` (mirror the email
   repo's wrapper pattern: props in, DOM CustomEvents out). **DoD:** each builds;
   a minimal render test each.
