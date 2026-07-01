@@ -55,7 +55,7 @@ implements it, and opens a PR.
   Export both elements from `src/index.ts`. **DoD:** component test (set a
   template → preview text present, invalid template → error shown); build/lint.
 
-- [ ] **playground**: Add `apps/playground` — a Vite app that mounts
+- [x] **playground** (#4): Add `apps/playground` — a Vite app that mounts
   `<pigeon-whatsapp-editor>` with a sample template so the editor can be opened
   in a browser (`pnpm --filter playground dev`). Add `index.html`, `src/main.ts`,
   `vite.config.ts`, `tsconfig.json`, package.json (`private: true`). **DoD:**
