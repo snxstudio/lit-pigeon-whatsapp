@@ -1,0 +1,22 @@
+{
+  "name": "lit-pigeon-whatsapp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Open-source WhatsApp message-template designer — build, validate against Meta's rules, and preview templates. Part of the Lit Pigeon family.",
+  "packageManager": "pnpm@9.1.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint packages"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.0.0"
+  }
+}
