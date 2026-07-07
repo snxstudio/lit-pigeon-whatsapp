@@ -81,7 +81,7 @@ implements it, and opens a PR.
   (`/{waba-id}/message_templates`), plus `listTemplates()`. Takes token + WABA id;
   validates first and refuses on errors. **DoD:** unit tests with a mocked fetch.
 
-- [ ] **starter-templates**: Add `getStarterTemplates()` to core — welcome,
+- [x] **starter-templates** (#8): Add `getStarterTemplates()` to core — welcome,
   order-update (UTILITY), and an OTP (AUTHENTICATION) example, all passing
   `validateTemplate`. **DoD:** a test asserting every starter is `valid`.
 
