@@ -76,7 +76,7 @@ implements it, and opens a PR.
   repo's wrapper pattern: props in, DOM CustomEvents out). **DoD:** each builds;
   a minimal render test each.
 
-- [ ] **submit-helper**: Optional `@lit-pigeon/whatsapp-cloud` — `submitTemplate()`
+- [x] **submit-helper** (#7): Optional `@lit-pigeon/whatsapp-cloud` — `submitTemplate()`
   that POSTs a validated template to Meta's Graph API
   (`/{waba-id}/message_templates`), plus `listTemplates()`. Takes token + WABA id;
   validates first and refuses on errors. **DoD:** unit tests with a mocked fetch.
