@@ -35,7 +35,7 @@ implements it, and opens a PR.
   (`environment: 'happy-dom'`), a `LICENSE` (copy root), and a stub
   `src/index.ts`. **DoD:** `pnpm build` + `pnpm lint` pass with the empty package.
 
-- [ ] **preview-component**: Add `<pigeon-whatsapp-preview>` (`src/whatsapp-preview.ts`).
+- [x] **preview-component** (#2): Add `<pigeon-whatsapp-preview>` (`src/whatsapp-preview.ts`).
   A Lit element with a `template: WhatsAppTemplate` property that renders a
   WhatsApp-style chat bubble: header (text or a media placeholder), body with
   `{{n}}` substituted by `example.body_text[0]` samples and WhatsApp formatting
