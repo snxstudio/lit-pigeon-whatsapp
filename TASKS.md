@@ -97,5 +97,5 @@ implements it, and opens a PR.
   (OTP button rules, `add_security_recommendation`, `code_expiration_minutes`,
   no other components). **DoD:** tests for valid + invalid OTP templates.
 
-- [ ] **locale-list**: Export the set of WhatsApp-supported language codes and
+- [x] **locale-list** (#9): Export the set of WhatsApp-supported language codes and
   warn (not error) on an unknown `language`. **DoD:** tests.

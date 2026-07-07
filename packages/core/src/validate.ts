@@ -8,6 +8,7 @@ import type {
   ButtonsComponent,
 } from './types.js';
 import { LIMITS, NAME_RE, CATEGORIES } from './constants.js';
+import { isSupportedLanguage } from './locales.js';
 import {
   extractVariables,
   distinctVariables,
@@ -52,6 +53,11 @@ export function validateTemplate(template: WhatsAppTemplate): ValidationResult {
   validateName(template.name, err);
   if (!template.language || !template.language.trim()) {
     err('language-required', 'A language code is required (e.g. "en_US").');
+  } else if (!isSupportedLanguage(template.language)) {
+    warn(
+      'language-unknown',
+      `"${template.language}" is not a recognised WhatsApp language code — double-check it (e.g. "en_US").`,
+    );
   }
   if (!CATEGORIES.includes(template.category)) {
     err('category-invalid', `Category must be one of ${CATEGORIES.join(', ')}.`);
