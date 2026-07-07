@@ -31,6 +31,11 @@ function icon(kind: ButtonType | HeaderFormat): TemplateResult {
   return svg`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[kind]}</svg>`;
 }
 
+/** Business-account verified check shown next to the peer name. */
+const VERIFIED: TemplateResult = html`<svg viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M9.6 16.6l-4.2-4.2 1.4-1.4 2.8 2.8 6.4-6.4 1.4 1.4z" />
+</svg>`;
+
 function buttonLabel(button: Button): string {
   return button.type === 'COPY_CODE' ? 'Copy code' : button.text;
 }
@@ -52,23 +57,91 @@ export class PigeonWhatsAppPreview extends LitElement {
       font-family:
         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
         sans-serif;
+      --wa-teal: #008069;
       --wa-bubble: #ffffff;
       --wa-text: #111b21;
       --wa-muted: #667781;
-      --wa-link: #00a5f4;
+      --wa-link: #027eb5;
       --wa-divider: #e9edef;
     }
+    /* Phone-style conversation window. */
+    .window {
+      max-width: 340px;
+      margin: 0 auto;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #efeae2;
+      box-shadow:
+        0 1px 2px rgba(11, 20, 26, 0.08),
+        0 12px 28px -12px rgba(11, 20, 26, 0.35);
+      border: 1px solid rgba(11, 20, 26, 0.06);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--wa-teal);
+      color: #fff;
+    }
+    .topbar .back {
+      font-size: 18px;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex: 0 0 auto;
+    }
+    .peer {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.25;
+    }
+    .peer .name {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .peer .name svg {
+      width: 13px;
+      height: 13px;
+      fill: #fff;
+      opacity: 0.9;
+      flex: 0 0 auto;
+    }
+    .peer .status {
+      font-size: 11.5px;
+      opacity: 0.85;
+    }
     .chat {
-      background-color: #e5ddd5;
-      padding: 16px;
+      /* Faint WhatsApp-style wallpaper doodle over the classic beige. */
+      background-color: #efeae2;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><g fill="none" stroke="%23d9d0c4" stroke-width="1.4" stroke-linecap="round" opacity="0.55"><circle cx="20" cy="20" r="5"/><path d="M52 14l8 8M60 14l-8 8"/><path d="M14 54h12M14 60h8"/><circle cx="60" cy="58" r="6"/></g></svg>');
+      padding: 18px 14px 16px;
+      min-height: 120px;
     }
     .bubble {
       position: relative;
-      max-width: 320px;
+      max-width: 82%;
       background: var(--wa-bubble);
-      border-radius: 7.5px;
+      border-radius: 8px;
+      border-top-left-radius: 0;
       box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
-      padding: 6px 7px 8px 9px;
+      padding: 6px 8px 6px 10px;
       color: var(--wa-text);
       font-size: 14.2px;
       line-height: 19px;
@@ -90,18 +163,27 @@ export class PigeonWhatsAppPreview extends LitElement {
     }
     .media {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 160px;
-      margin-bottom: 6px;
+      gap: 6px;
+      height: 158px;
+      margin: -2px -4px 6px;
       border-radius: 6px;
-      background: #ccd0d5;
+      background: linear-gradient(135deg, #cfd6da 0%, #b7c1c6 100%);
       color: #fff;
     }
     .media svg {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       fill: currentColor;
+      opacity: 0.95;
+    }
+    .media .kind {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       opacity: 0.9;
     }
     .body {
@@ -119,20 +201,35 @@ export class PigeonWhatsAppPreview extends LitElement {
       color: var(--wa-muted);
       word-wrap: break-word;
     }
+    .time {
+      display: block;
+      margin-top: 2px;
+      text-align: right;
+      font-size: 11px;
+      color: var(--wa-muted);
+    }
     .buttons {
-      margin-top: 6px;
+      max-width: 82%;
+      margin-top: 2px;
+      background: var(--wa-bubble);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
     }
     .button {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px;
+      padding: 9px;
       border-top: 1px solid var(--wa-divider);
       color: var(--wa-link);
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
+    }
+    .buttons .button:first-child {
+      border-top: none;
     }
     .button svg {
       width: 18px;
@@ -155,7 +252,9 @@ export class PigeonWhatsAppPreview extends LitElement {
       const text = substituteVariables(header.text ?? '', header.example?.header_text);
       return html`<div class="header-text">${text}</div>`;
     }
-    return html`<div class="media" title=${header.format}>${icon(header.format)}</div>`;
+    return html`<div class="media" title=${header.format}>
+      ${icon(header.format)}<span class="kind">${header.format}</span>
+    </div>`;
   }
 
   private renderBody(body: BodyComponent | undefined) {
@@ -180,11 +279,22 @@ export class PigeonWhatsAppPreview extends LitElement {
   }
 
   render() {
-    return html`<div class="chat">
-      <div class="bubble">
-        ${this.renderHeader(this.find<HeaderComponent>('HEADER'))}
-        ${this.renderBody(this.find<BodyComponent>('BODY'))}
-        ${this.renderFooter(this.find<FooterComponent>('FOOTER'))}
+    return html`<div class="window">
+      <div class="topbar">
+        <span class="back" aria-hidden="true">‹</span>
+        <span class="avatar" aria-hidden="true">🕊️</span>
+        <span class="peer">
+          <span class="name">Business ${VERIFIED}</span>
+          <span class="status">business account</span>
+        </span>
+      </div>
+      <div class="chat">
+        <div class="bubble">
+          ${this.renderHeader(this.find<HeaderComponent>('HEADER'))}
+          ${this.renderBody(this.find<BodyComponent>('BODY'))}
+          ${this.renderFooter(this.find<FooterComponent>('FOOTER'))}
+          <span class="time">10:24</span>
+        </div>
         ${this.renderButtons(this.find<ButtonsComponent>('BUTTONS'))}
       </div>
     </div>`;
