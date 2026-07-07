@@ -35,7 +35,7 @@ implements it, and opens a PR.
   (`environment: 'happy-dom'`), a `LICENSE` (copy root), and a stub
   `src/index.ts`. **DoD:** `pnpm build` + `pnpm lint` pass with the empty package.
 
-- [ ] **preview-component**: Add `<pigeon-whatsapp-preview>` (`src/whatsapp-preview.ts`).
+- [x] **preview-component** (#2): Add `<pigeon-whatsapp-preview>` (`src/whatsapp-preview.ts`).
   A Lit element with a `template: WhatsAppTemplate` property that renders a
   WhatsApp-style chat bubble: header (text or a media placeholder), body with
   `{{n}}` substituted by `example.body_text[0]` samples and WhatsApp formatting
@@ -45,7 +45,7 @@ implements it, and opens a PR.
   `src/format.ts` helper (`substituteVariables`, `renderWhatsAppText`).
   **DoD:** unit tests for `format.ts` + a render smoke test; build/lint green.
 
-- [ ] **editor-component**: Add `<pigeon-whatsapp-editor>` (`src/whatsapp-editor.ts`).
+- [x] **editor-component** (#3): Add `<pigeon-whatsapp-editor>` (`src/whatsapp-editor.ts`).
   Two-pane layout: a form (name, language, category, header format+text, body
   textarea + comma-separated sample values, footer, add/remove/edit buttons) on
   the left; `<pigeon-whatsapp-preview>` + a validation panel (errors/warnings
@@ -55,7 +55,7 @@ implements it, and opens a PR.
   Export both elements from `src/index.ts`. **DoD:** component test (set a
   template → preview text present, invalid template → error shown); build/lint.
 
-- [ ] **playground**: Add `apps/playground` — a Vite app that mounts
+- [x] **playground** (#4): Add `apps/playground` — a Vite app that mounts
   `<pigeon-whatsapp-editor>` with a sample template so the editor can be opened
   in a browser (`pnpm --filter playground dev`). Add `index.html`, `src/main.ts`,
   `vite.config.ts`, `tsconfig.json`, package.json (`private: true`). **DoD:**
@@ -63,7 +63,7 @@ implements it, and opens a PR.
 
 ## Phase 3 — AI authoring
 
-- [ ] **mcp-server**: Add `@lit-pigeon/whatsapp-mcp` (`packages/mcp-server/`) — a
+- [x] **mcp-server** (#5): Add `@lit-pigeon/whatsapp-mcp` (`packages/mcp-server/`) — a
   stdio MCP server exposing tools: `create_template`, `validate_template`,
   `list_categories`, `render_preview_text`, `build_cloud_api_payload`. Reuse the
   `@modelcontextprotocol/sdk` pattern from the email repo's mcp-server. **DoD:**
@@ -71,17 +71,17 @@ implements it, and opens a PR.
 
 ## Phase 4 — Ecosystem & release
 
-- [ ] **framework-wrappers**: Thin `@lit-pigeon/whatsapp-react`,
+- [x] **framework-wrappers** (#6): Thin `@lit-pigeon/whatsapp-react`,
   `-vue`, `-svelte` wrappers around `<pigeon-whatsapp-editor>` (mirror the email
   repo's wrapper pattern: props in, DOM CustomEvents out). **DoD:** each builds;
   a minimal render test each.
 
-- [ ] **submit-helper**: Optional `@lit-pigeon/whatsapp-cloud` — `submitTemplate()`
+- [x] **submit-helper** (#7): Optional `@lit-pigeon/whatsapp-cloud` — `submitTemplate()`
   that POSTs a validated template to Meta's Graph API
   (`/{waba-id}/message_templates`), plus `listTemplates()`. Takes token + WABA id;
   validates first and refuses on errors. **DoD:** unit tests with a mocked fetch.
 
-- [ ] **starter-templates**: Add `getStarterTemplates()` to core — welcome,
+- [x] **starter-templates** (#8): Add `getStarterTemplates()` to core — welcome,
   order-update (UTILITY), and an OTP (AUTHENTICATION) example, all passing
   `validateTemplate`. **DoD:** a test asserting every starter is `valid`.
 

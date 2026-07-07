@@ -1,0 +1,46 @@
+{
+  "name": "@lit-pigeon/whatsapp-vue",
+  "version": "0.0.0",
+  "description": "Vue wrapper for the <pigeon-whatsapp-editor> WhatsApp template editor web component.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": ["whatsapp", "message-template", "vue", "web-components", "lit-pigeon"],
+  "author": "Lit Pigeon Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/snxstudio/lit-pigeon-whatsapp/tree/main/packages/vue#readme",
+  "bugs": "https://github.com/snxstudio/lit-pigeon-whatsapp/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snxstudio/lit-pigeon-whatsapp.git",
+    "directory": "packages/vue"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lit-pigeon/whatsapp-core": "workspace:^",
+    "@lit-pigeon/whatsapp-editor": "workspace:^"
+  },
+  "peerDependencies": {
+    "vue": "^3"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^15.11.0",
+    "vue": "^3.5.0"
+  }
+}

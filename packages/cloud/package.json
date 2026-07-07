@@ -1,0 +1,45 @@
+{
+  "name": "@lit-pigeon/whatsapp-cloud",
+  "version": "0.0.0",
+  "description": "Submit and list WhatsApp Business message templates via Meta's Graph API.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": [
+    "whatsapp",
+    "whatsapp-business",
+    "message-template",
+    "meta",
+    "graph-api",
+    "cloud-api",
+    "lit-pigeon"
+  ],
+  "author": "Lit Pigeon Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/snxstudio/lit-pigeon-whatsapp/tree/main/packages/cloud#readme",
+  "bugs": "https://github.com/snxstudio/lit-pigeon-whatsapp/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snxstudio/lit-pigeon-whatsapp.git",
+    "directory": "packages/cloud"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lit-pigeon/whatsapp-core": "workspace:^"
+  }
+}

@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 .turbo/
+.svelte-kit/
 coverage/
 .DS_Store
 *.log
