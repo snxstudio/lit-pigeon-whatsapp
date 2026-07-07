@@ -2,3 +2,4 @@
 // and validating WhatsApp Business message templates.
 export * from './format.js';
 export * from './whatsapp-preview.js';
+export * from './whatsapp-editor.js';

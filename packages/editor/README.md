@@ -5,8 +5,28 @@ templates](https://developers.facebook.com/docs/whatsapp/message-templates)
 against Meta's Cloud API rules. Built on
 [`@lit-pigeon/whatsapp-core`](../core#readme).
 
-> **Status:** early. `<pigeon-whatsapp-preview>` is available; the
-> `<pigeon-whatsapp-editor>` element lands in a follow-up task.
+> **Status:** early. `<pigeon-whatsapp-preview>` and `<pigeon-whatsapp-editor>`
+> are available.
+
+## `<pigeon-whatsapp-editor>`
+
+A two-pane template builder: a form (name, language, category, header, body +
+sample values, footer, buttons) on the left, and a live
+`<pigeon-whatsapp-preview>` plus a validation panel (errors/warnings from
+`validateTemplate`) on the right.
+
+Edits are immutable and dispatch a `pigeon:change` event; `getPayload()` returns
+the current template (the payload you submit to Meta).
+
+```ts
+import '@lit-pigeon/whatsapp-editor'; // registers both elements
+```
+
+```html
+<pigeon-whatsapp-editor
+  @pigeon:change=${(e) => console.log(e.detail.template)}
+></pigeon-whatsapp-editor>
+```
 
 ## `<pigeon-whatsapp-preview>`
 

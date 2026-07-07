@@ -45,7 +45,7 @@ implements it, and opens a PR.
   `src/format.ts` helper (`substituteVariables`, `renderWhatsAppText`).
   **DoD:** unit tests for `format.ts` + a render smoke test; build/lint green.
 
-- [ ] **editor-component**: Add `<pigeon-whatsapp-editor>` (`src/whatsapp-editor.ts`).
+- [x] **editor-component** (#3): Add `<pigeon-whatsapp-editor>` (`src/whatsapp-editor.ts`).
   Two-pane layout: a form (name, language, category, header format+text, body
   textarea + comma-separated sample values, footer, add/remove/edit buttons) on
   the left; `<pigeon-whatsapp-preview>` + a validation panel (errors/warnings
