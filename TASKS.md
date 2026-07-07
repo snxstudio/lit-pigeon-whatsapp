@@ -63,7 +63,7 @@ implements it, and opens a PR.
 
 ## Phase 3 — AI authoring
 
-- [ ] **mcp-server**: Add `@lit-pigeon/whatsapp-mcp` (`packages/mcp-server/`) — a
+- [x] **mcp-server** (#5): Add `@lit-pigeon/whatsapp-mcp` (`packages/mcp-server/`) — a
   stdio MCP server exposing tools: `create_template`, `validate_template`,
   `list_categories`, `render_preview_text`, `build_cloud_api_payload`. Reuse the
   `@modelcontextprotocol/sdk` pattern from the email repo's mcp-server. **DoD:**

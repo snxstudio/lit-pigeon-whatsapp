@@ -1,0 +1,54 @@
+{
+  "name": "@lit-pigeon/whatsapp-mcp",
+  "version": "0.0.0",
+  "description": "Model Context Protocol (stdio) server for building and validating WhatsApp Business message templates.",
+  "type": "module",
+  "main": "./dist/server.js",
+  "module": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    }
+  },
+  "bin": {
+    "lit-pigeon-whatsapp-mcp": "./dist/index.js"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": [
+    "whatsapp",
+    "whatsapp-business",
+    "message-template",
+    "meta",
+    "cloud-api",
+    "mcp",
+    "model-context-protocol",
+    "lit-pigeon"
+  ],
+  "author": "Lit Pigeon Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/snxstudio/lit-pigeon-whatsapp/tree/main/packages/mcp-server#readme",
+  "bugs": "https://github.com/snxstudio/lit-pigeon-whatsapp/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snxstudio/lit-pigeon-whatsapp.git",
+    "directory": "packages/mcp-server"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lit-pigeon/whatsapp-core": "workspace:^",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
