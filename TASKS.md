@@ -85,7 +85,7 @@ implements it, and opens a PR.
   order-update (UTILITY), and an OTP (AUTHENTICATION) example, all passing
   `validateTemplate`. **DoD:** a test asserting every starter is `valid`.
 
-- [ ] **release-setup**: Add changesets (`.changeset/`), a `release.yml` mirroring
+- [x] **release-setup** (#13): Add changesets (`.changeset/`), a `release.yml` mirroring
   the email repo, README polish per package, then a changeset to publish
   **0.1.0** under `@lit-pigeon`. **DoD:** `pnpm changeset status` clean; do NOT
   publish in the PR (human triggers release). Note the "Actions can't open PRs"
