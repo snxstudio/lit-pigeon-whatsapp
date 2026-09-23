@@ -171,6 +171,32 @@ Issues and PRs are welcome. Please keep packages framework-agnostic, match the
 existing code style (ESLint 9 flat config, Vitest, TypeScript strict), and make
 sure `pnpm build && pnpm typecheck && pnpm test && pnpm lint` all pass.
 
+Every change that ships to npm needs a [changeset](https://github.com/changesets/changesets):
+
+```sh
+pnpm changeset          # describe your change and pick the version bumps
+pnpm changeset status   # preview the pending releases
+```
+
+## Releases
+
+Publishing is driven by [changesets](https://github.com/changesets/changesets) and
+the [`release.yml`](./.github/workflows/release.yml) workflow, which runs
+`changeset publish` on `main` once versions have been bumped.
+
+> **Org limitation — Actions can't open PRs.** This organization does not let
+> GitHub Actions create pull requests, so the usual changesets "Version Packages"
+> PR is not opened automatically. A maintainer bumps versions locally instead:
+>
+> ```sh
+> pnpm version   # runs `changeset version` — updates versions + changelogs
+> git commit -am "chore: version packages"
+> git push
+> ```
+>
+> Merging that to `main` triggers the release workflow, which publishes the
+> updated packages to npm (using the `NPM_TOKEN` secret).
+
 ## License
 
 [MIT](./LICENSE) © SNX Studio
