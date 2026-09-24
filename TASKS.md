@@ -93,7 +93,7 @@ implements it, and opens a PR.
 
 ## Phase 5 — Polish
 
-- [ ] **auth-templates**: Extend the validator for AUTHENTICATION templates
+- [x] **auth-templates** (#14): Extend the validator for AUTHENTICATION templates
   (OTP button rules, `add_security_recommendation`, `code_expiration_minutes`,
   no other components). **DoD:** tests for valid + invalid OTP templates.
 

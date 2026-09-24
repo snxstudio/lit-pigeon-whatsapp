@@ -2,12 +2,14 @@ import type {
   WhatsAppTemplate,
   Component,
   ComponentType,
+  TemplateCategory,
+  Button,
   HeaderComponent,
   BodyComponent,
   FooterComponent,
   ButtonsComponent,
 } from './types.js';
-import { LIMITS, NAME_RE, CATEGORIES } from './constants.js';
+import { LIMITS, NAME_RE, CATEGORIES, OTP_TYPES } from './constants.js';
 import { isSupportedLanguage } from './locales.js';
 import {
   extractVariables,
@@ -82,10 +84,15 @@ export function validateTemplate(template: WhatsAppTemplate): ValidationResult {
     err('buttons-single', 'Only one BUTTONS component is allowed.', 'BUTTONS');
   }
 
+  const category = template.category;
+  if (category === 'AUTHENTICATION' && headers.length > 0) {
+    err('auth-no-header', 'AUTHENTICATION templates cannot include a HEADER.', 'HEADER');
+  }
+
   if (headers[0]) validateHeader(headers[0], err, warn);
-  if (bodies[0]) validateBody(bodies[0], err, warn);
-  if (footers[0]) validateFooter(footers[0], err);
-  if (buttonBlocks[0]) validateButtons(buttonBlocks[0], err, warn);
+  if (bodies[0]) validateBody(bodies[0], category, err, warn);
+  if (footers[0]) validateFooter(footers[0], category, err, warn);
+  if (buttonBlocks[0]) validateButtons(buttonBlocks[0], category, err, warn);
 
   const errors = issues.filter((i) => i.severity === 'error');
   const warnings = issues.filter((i) => i.severity === 'warning');
@@ -148,7 +155,20 @@ function validateHeader(header: HeaderComponent, err: Add, warn: Add): void {
   }
 }
 
-function validateBody(body: BodyComponent, err: Add, warn: Add): void {
+function validateBody(
+  body: BodyComponent,
+  category: TemplateCategory,
+  err: Add,
+  warn: Add,
+): void {
+  if (body.add_security_recommendation !== undefined && category !== 'AUTHENTICATION') {
+    warn(
+      'security-recommendation-category',
+      'add_security_recommendation only applies to AUTHENTICATION templates.',
+      'BODY',
+    );
+  }
+
   const text = body.text ?? '';
   if (!text.trim()) {
     err('body-empty', 'BODY text cannot be empty.', 'BODY');
@@ -196,9 +216,39 @@ function validateBody(body: BodyComponent, err: Add, warn: Add): void {
   }
 }
 
-function validateFooter(footer: FooterComponent, err: Add): void {
+function validateFooter(
+  footer: FooterComponent,
+  category: TemplateCategory,
+  err: Add,
+  warn: Add,
+): void {
+  const expiry = footer.code_expiration_minutes;
+  if (expiry !== undefined) {
+    if (category !== 'AUTHENTICATION') {
+      warn(
+        'code-expiration-category',
+        'code_expiration_minutes only applies to AUTHENTICATION templates.',
+        'FOOTER',
+      );
+    }
+    if (
+      !Number.isInteger(expiry) ||
+      expiry < LIMITS.CODE_EXPIRATION_MIN ||
+      expiry > LIMITS.CODE_EXPIRATION_MAX
+    ) {
+      err(
+        'code-expiration-range',
+        `code_expiration_minutes must be a whole number between ${LIMITS.CODE_EXPIRATION_MIN} and ${LIMITS.CODE_EXPIRATION_MAX}.`,
+        'FOOTER',
+      );
+    }
+  }
+
   const text = footer.text ?? '';
   if (!text.trim()) {
+    // An AUTHENTICATION footer is just the "expires in n minutes" line, so it
+    // needs no custom text of its own.
+    if (category === 'AUTHENTICATION' && expiry !== undefined) return;
     err('footer-empty', 'FOOTER text cannot be empty.', 'FOOTER');
     return;
   }
@@ -210,7 +260,12 @@ function validateFooter(footer: FooterComponent, err: Add): void {
   }
 }
 
-function validateButtons(block: ButtonsComponent, err: Add, warn: Add): void {
+function validateButtons(
+  block: ButtonsComponent,
+  category: TemplateCategory,
+  err: Add,
+  warn: Add,
+): void {
   const buttons = block.buttons ?? [];
   if (buttons.length === 0) {
     warn('buttons-empty', 'BUTTONS component has no buttons.', 'BUTTONS');
@@ -221,6 +276,7 @@ function validateButtons(block: ButtonsComponent, err: Add, warn: Add): void {
   }
   const urls = buttons.filter((b) => b.type === 'URL').length;
   const phones = buttons.filter((b) => b.type === 'PHONE_NUMBER').length;
+  const otps = buttons.filter((b) => b.type === 'OTP').length;
   if (urls > LIMITS.URL_BUTTONS_MAX) {
     err('buttons-url-max', `At most ${LIMITS.URL_BUTTONS_MAX} URL buttons are allowed.`, 'BUTTONS');
   }
@@ -231,10 +287,13 @@ function validateButtons(block: ButtonsComponent, err: Add, warn: Add): void {
       'BUTTONS',
     );
   }
+  if (otps > 1) {
+    err('otp-single', 'A template may have at most one OTP button.', 'BUTTONS');
+  }
 
   buttons.forEach((b, i) => {
     const label = `Button ${i + 1}`;
-    if (b.type !== 'COPY_CODE') {
+    if (b.type !== 'COPY_CODE' && b.type !== 'OTP') {
       if (!b.text || !b.text.trim()) {
         err('button-text-required', `${label}: button text is required.`, 'BUTTONS');
       } else if (b.text.length > LIMITS.BUTTON_TEXT_MAX) {
@@ -254,5 +313,42 @@ function validateButtons(block: ButtonsComponent, err: Add, warn: Add): void {
     if (b.type === 'COPY_CODE' && !b.example?.trim()) {
       err('button-copy-required', `${label}: a sample coupon code is required.`, 'BUTTONS');
     }
+    if (b.type === 'OTP') validateOtpButton(b, category, label, err, warn);
   });
+}
+
+function validateOtpButton(
+  button: Extract<Button, { type: 'OTP' }>,
+  category: TemplateCategory,
+  label: string,
+  err: Add,
+  warn: Add,
+): void {
+  if (category !== 'AUTHENTICATION') {
+    err('otp-button-category', `${label}: OTP buttons are only allowed on AUTHENTICATION templates.`, 'BUTTONS');
+  }
+  if (!OTP_TYPES.includes(button.otp_type)) {
+    err(
+      'otp-type-invalid',
+      `${label}: otp_type must be one of ${OTP_TYPES.join(', ')}.`,
+      'BUTTONS',
+    );
+  }
+  if (button.text && button.text.length > LIMITS.BUTTON_TEXT_MAX) {
+    err(
+      'button-text-length',
+      `${label}: text must be ≤ ${LIMITS.BUTTON_TEXT_MAX} characters.`,
+      'BUTTONS',
+    );
+  }
+  if (
+    (button.otp_type === 'ONE_TAP' || button.otp_type === 'ZERO_TAP') &&
+    !button.supported_apps?.length
+  ) {
+    warn(
+      'otp-supported-apps',
+      `${label}: ${button.otp_type} autofill needs at least one supported app (package_name + signature_hash).`,
+      'BUTTONS',
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import type { TemplateCategory } from './types.js';
+import type { TemplateCategory, OtpType } from './types.js';
 
 /**
  * Length / count limits Meta enforces on message templates.
@@ -13,7 +13,12 @@ export const LIMITS = {
   BUTTONS_MAX: 10,
   URL_BUTTONS_MAX: 2,
   PHONE_BUTTONS_MAX: 1,
+  CODE_EXPIRATION_MIN: 1,
+  CODE_EXPIRATION_MAX: 90,
 } as const;
+
+/** OTP delivery types for AUTHENTICATION templates. */
+export const OTP_TYPES: readonly OtpType[] = ['COPY_CODE', 'ONE_TAP', 'ZERO_TAP'];
 
 /** A valid template name: lowercase letters, digits, underscores. */
 export const NAME_RE = /^[a-z0-9_]+$/;

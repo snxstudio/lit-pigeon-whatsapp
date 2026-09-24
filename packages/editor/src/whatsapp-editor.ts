@@ -31,6 +31,7 @@ const NEW_BUTTON: Record<ButtonType, Button> = {
   URL: { type: 'URL', text: '', url: '' },
   PHONE_NUMBER: { type: 'PHONE_NUMBER', text: '', phone_number: '' },
   COPY_CODE: { type: 'COPY_CODE', example: '' },
+  OTP: { type: 'OTP', otp_type: 'COPY_CODE', text: '' },
 };
 /** Canonical component order Meta expects. */
 const ORDER: ComponentType[] = ['HEADER', 'BODY', 'FOOTER', 'BUTTONS'];
