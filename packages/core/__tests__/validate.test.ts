@@ -152,6 +152,103 @@ describe('buttons', () => {
   });
 });
 
+describe('authentication', () => {
+  /** A well-formed AUTHENTICATION / OTP template used as a baseline. */
+  function authTemplate(): WhatsAppTemplate {
+    return {
+      name: 'verification_code',
+      language: 'en_US',
+      category: 'AUTHENTICATION',
+      components: [
+        {
+          type: 'BODY',
+          text: 'Your verification code is {{1}}.',
+          example: { body_text: [['123456']] },
+          add_security_recommendation: true,
+        },
+        { type: 'FOOTER', text: '', code_expiration_minutes: 10 },
+        {
+          type: 'BUTTONS',
+          buttons: [{ type: 'OTP', otp_type: 'COPY_CODE', text: 'Copy code' }],
+        },
+      ],
+    };
+  }
+
+  it('accepts a well-formed OTP template', () => {
+    const res = validateTemplate(authTemplate());
+    expect(res.valid, res.errors.map((e) => e.rule).join(', ')).toBe(true);
+    expect(res.errors).toHaveLength(0);
+  });
+
+  it('accepts a bare FOOTER when it only carries an expiry', () => {
+    const t = authTemplate();
+    // A footer with no text but a code_expiration_minutes must not be "empty".
+    expect(rules(t)).not.toContain('footer-empty');
+  });
+
+  it('rejects a HEADER on an AUTHENTICATION template', () => {
+    const t = authTemplate();
+    t.components.unshift({ type: 'HEADER', format: 'TEXT', text: 'Verify' });
+    expect(rules(t)).toContain('auth-no-header');
+  });
+
+  it('rejects code_expiration_minutes outside 1–90', () => {
+    const t = authTemplate();
+    t.components[1] = { type: 'FOOTER', text: '', code_expiration_minutes: 120 };
+    expect(rules(t)).toContain('code-expiration-range');
+  });
+
+  it('rejects a non-integer code_expiration_minutes', () => {
+    const t = authTemplate();
+    t.components[1] = { type: 'FOOTER', text: '', code_expiration_minutes: 10.5 };
+    expect(rules(t)).toContain('code-expiration-range');
+  });
+
+  it('rejects an unknown otp_type', () => {
+    const t = authTemplate();
+    // @ts-expect-error testing an invalid runtime value
+    t.components[2] = { type: 'BUTTONS', buttons: [{ type: 'OTP', otp_type: 'SMS' }] };
+    expect(rules(t)).toContain('otp-type-invalid');
+  });
+
+  it('rejects more than one OTP button', () => {
+    const t = authTemplate();
+    t.components[2] = {
+      type: 'BUTTONS',
+      buttons: [
+        { type: 'OTP', otp_type: 'COPY_CODE' },
+        { type: 'OTP', otp_type: 'COPY_CODE' },
+      ],
+    };
+    expect(rules(t)).toContain('otp-single');
+  });
+
+  it('rejects an OTP button on a non-AUTHENTICATION template', () => {
+    const t = validTemplate();
+    t.components[3] = { type: 'BUTTONS', buttons: [{ type: 'OTP', otp_type: 'COPY_CODE' }] };
+    expect(rules(t)).toContain('otp-button-category');
+  });
+
+  it('warns when a one-tap OTP button has no supported apps', () => {
+    const t = authTemplate();
+    t.components[2] = { type: 'BUTTONS', buttons: [{ type: 'OTP', otp_type: 'ONE_TAP' }] };
+    const res = validateTemplate(t);
+    expect(res.valid).toBe(true);
+    expect(res.warnings.map((w) => w.rule)).toContain('otp-supported-apps');
+  });
+
+  it('warns when auth-only fields appear on a non-AUTHENTICATION template', () => {
+    const t = validTemplate();
+    const body = t.components.find((c) => c.type === 'BODY');
+    if (body?.type === 'BODY') body.add_security_recommendation = true;
+    t.components[2] = { type: 'FOOTER', text: 'Reply STOP', code_expiration_minutes: 10 };
+    const warnings = validateTemplate(t).warnings.map((w) => w.rule);
+    expect(warnings).toContain('security-recommendation-category');
+    expect(warnings).toContain('code-expiration-category');
+  });
+});
+
 describe('variable helpers', () => {
   it('extracts and dedupes variables', () => {
     expect(extractVariables('a {{1}} b {{2}} c {{1}}')).toEqual([1, 2, 1]);

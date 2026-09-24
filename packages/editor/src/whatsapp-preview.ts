@@ -20,6 +20,7 @@ const ICONS: Record<ButtonType | HeaderFormat, TemplateResult> = {
   URL: svg`<path d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3h-7zM5 5h5V3H3v18h18v-7h-2v5H5V5z"/>`,
   PHONE_NUMBER: svg`<path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10 21 3 14 3 5c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2z"/>`,
   COPY_CODE: svg`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>`,
+  OTP: svg`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>`,
   TEXT: svg`<path d="M4 6h16v2H4zM4 11h16v2H4zM4 16h10v2H4z"/>`,
   IMAGE: svg`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>`,
   VIDEO: svg`<path d="M4 4h12c1.1 0 2 .9 2 2v3.5l4-4v13l-4-4V18c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>`,
@@ -37,7 +38,9 @@ const VERIFIED: TemplateResult = html`<svg viewBox="0 0 24 24" aria-hidden="true
 </svg>`;
 
 function buttonLabel(button: Button): string {
-  return button.type === 'COPY_CODE' ? 'Copy code' : button.text;
+  if (button.type === 'COPY_CODE') return 'Copy code';
+  if (button.type === 'OTP') return button.text ?? 'Copy code';
+  return button.text;
 }
 
 /**

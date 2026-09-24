@@ -32,19 +32,47 @@ export interface BodyComponent {
     /** One row of sample values, one entry per variable. */
     body_text?: string[][];
   };
+  /**
+   * AUTHENTICATION only. Appends Meta's "For your security, do not share this
+   * code." recommendation line to the generated body.
+   */
+  add_security_recommendation?: boolean;
 }
 
 /** Optional footer. Plain text only — no variables, no formatting. */
 export interface FooterComponent {
   type: 'FOOTER';
   text: string;
+  /**
+   * AUTHENTICATION only. Adds a "This code expires in {n} minutes." line.
+   * Meta accepts 1–90.
+   */
+  code_expiration_minutes?: number;
+}
+
+/** How an OTP button delivers the code. */
+export type OtpType = 'COPY_CODE' | 'ONE_TAP' | 'ZERO_TAP';
+
+/** An Android app allowed to autofill a one-tap / zero-tap OTP. */
+export interface OtpSupportedApp {
+  package_name: string;
+  signature_hash: string;
 }
 
 export type Button =
   | { type: 'QUICK_REPLY'; text: string }
   | { type: 'URL'; text: string; url: string; example?: string[] }
   | { type: 'PHONE_NUMBER'; text: string; phone_number: string }
-  | { type: 'COPY_CODE'; example: string };
+  | { type: 'COPY_CODE'; example: string }
+  | {
+      /** AUTHENTICATION one-time-passcode button. */
+      type: 'OTP';
+      otp_type: OtpType;
+      /** Button label. Meta defaults to "Copy code" when omitted. */
+      text?: string;
+      /** Autofill apps — required for ONE_TAP / ZERO_TAP. */
+      supported_apps?: OtpSupportedApp[];
+    };
 
 export type ButtonType = Button['type'];
 
